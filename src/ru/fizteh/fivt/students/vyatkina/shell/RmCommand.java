@@ -1,17 +1,19 @@
 package ru.fizteh.fivt.students.vyatkina.shell;
 
-/**
- * Created with IntelliJ IDEA.
- * User: ava_katushka
- * Date: 10.10.13
- * Time: 21:02
- * To change this template use File | Settings | File Templates.
- */
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class RmCommand implements Command {
+    FileManager fileManager;
+
+    RmCommand (FileManager fileManager) {
+      this.fileManager = fileManager;
+    }
 
     @Override
-    public void execute (String[] args) throws IllegalArgumentException {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void execute (String[] args) throws RuntimeException {
+        Path file = Paths.get (args[0]);
+        fileManager.deleteFile (file);
     }
 
     @Override

@@ -17,7 +17,7 @@ public class Shell {
 
    FileManager fileManager = new FileManager ();
    private HashMap <String,Command> COMMAND_MAP = new HashMap<> ();
-   String possibleCommands = "pwd|dir|exit|cd|dir|mkdir|cp";
+   String possibleCommands = "pwd|dir|exit|cd|dir|mkdir|cp|rm";
    String commandSeparator = ";";
 
    final static String INVALID_NUMBER_OF_ARGUMENTS = "Invalid number of arguments";
@@ -49,6 +49,7 @@ public class Shell {
         commands.add (new CdCommand (fileManager));
         commands.add (new MkdirCommand (fileManager));
         commands.add (new CpCommand (fileManager));
+        commands.add (new RmCommand (fileManager));
 
         return commands;
     }

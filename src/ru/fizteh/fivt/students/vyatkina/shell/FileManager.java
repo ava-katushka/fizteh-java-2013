@@ -160,6 +160,52 @@ public class FileManager {
             }
         }
     }
+
+    void deleteFile (Path file) throws RuntimeException {
+      if (Files.notExists (file)) {
+          throw new RuntimeException ("Try to delete file [" +file+ "] which doesn't exist" );
+      } else {
+          try {
+          Files.walkFileTree (file, new DeleteDirectoryVisitor ());
+          } catch (IOException e) {
+              throw new RuntimeException ("Unable to delete file [" + file  + "] " + e);
+          }
+      }
+    }
+
+    class DeleteDirectoryVisitor extends SimpleFileVisitor <Path> {
+        @Override
+        public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+            try {
+                Files.delete(file);
+            } catch (IOException e) {
+                throw new RuntimeException ("Unable to delete file [" + file  + "] " + e);
+            }
+            return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult postVisitDirectory(Path dir, IOException exc) {
+            if (exc == null) {
+                try {
+                    Files.delete (dir);
+                } catch (IOException e) {
+                    throw new RuntimeException ("Unable to delete directory [" + dir + "] " + e);
+                }
+            }
+            return FileVisitResult.CONTINUE;
+        }
+
+        @Override
+        public FileVisitResult visitFileFailed(Path file, IOException exc) {
+            if (exc instanceof FileSystemLoopException) {
+                throw new RuntimeException ("Cycle detected: " + file);
+            } else {
+                throw new RuntimeException ("Unable to delete: [" +  file + "] "+ exc);
+            }
+        }
+    }
+
     }
 
 
