@@ -1,26 +1,18 @@
 package ru.fizteh.fivt.students.vyatkina.shell;
 
-import java.io.InputStream;
-import java.io.PrintStream;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Scanner;
 import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.regex.Pattern;
 
 public class Shell {
 
    FileManager fileManager = new FileManager ();
    private HashMap <String,Command> COMMAND_MAP = new HashMap<> ();
    String possibleCommands = "pwd|dir|exit|cd|mkdir|cp|rm|mv";
-   String commandSeparator = ";";
 
-   final static String INVALID_NUMBER_OF_ARGUMENTS = "Invalid number of arguments";
    Mode mode;
 
     enum Mode {
@@ -80,11 +72,36 @@ public class Shell {
         }
         else {
           shell = new Shell (null,Mode.PACKET);
-          shell.startPacketMode (shell.splitPacketModeArgs (args));
+          StringBuilder sb = new StringBuilder ();
+          for (String arg: args) {
+            sb.append (arg);
+            sb.append (" ");
+          }
+          shell.startPacketMode (sb.toString ());
         }
     }
 
-    void startPacketMode (ArrayList<String> args) {
+    void startPacketMode (String input) {
+      String [] commandsWithArgs = input.trim ().split ("\\s*;\\s*");
+        for (String command: commandsWithArgs) {
+            String [] splitted = command.split ("\\s+");
+            if (Pattern.matches (possibleCommands , splitted [0]) ) {
+              String cmd = splitted [0];
+              int argsNumber = COMMAND_MAP.get (cmd).getArgumentCount ();
+              if (splitted.length - 1 == argsNumber) {
+                  String [] args = new String [argsNumber];
+                  for (int i = 0; i < argsNumber; i++) {
+                      args [i] = splitted [i + 1];
+                  }
+                  executeCommandPacketMode (COMMAND_MAP.get (cmd),args);
+              } else {
+                  throw new RuntimeException ("Wrong number of arguments in " + cmd +": needed: " + argsNumber
+                          + " have: " + (splitted.length - 1));
+              }
+            } else {
+                throw new RuntimeException ("Unknown command: [" + splitted[0] + "]");
+            }
+        }
 
 
     }
@@ -107,11 +124,6 @@ public class Shell {
             }
         }
 
-    }
-
-    private ArrayList <String> splitPacketModeArgs (String [] args) {
-        ArrayList <String> result = new ArrayList<> ();
-        return result;
     }
 
 
