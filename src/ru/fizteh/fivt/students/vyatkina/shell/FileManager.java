@@ -206,6 +206,17 @@ public class FileManager {
         }
     }
 
+    void moveFile (Path fromPath, Path toPath) throws RuntimeException{
+        if (Files.notExists (fromPath) || (Files.isDirectory (toPath) && Files.notExists (toPath))) {
+            throw new RuntimeException ("Fail to move [" + fromPath  + "] to [" + toPath + "] one of files doesn't exist" );
+        }
+        try {
+            Path destination = Files.isDirectory (toPath) ? toPath.resolve (fromPath.getFileName ()) : toPath;
+            Files.move (fromPath, destination, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException ("Fail to move [" + fromPath  + "] to [" + toPath + "] "+ e );
+        }
+    }
     }
 
 
