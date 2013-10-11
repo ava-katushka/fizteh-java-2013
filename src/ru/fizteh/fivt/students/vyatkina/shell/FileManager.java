@@ -85,14 +85,18 @@ public class FileManager {
     }
 
     public void copyFile (Path fromPath, Path toPath) {
+        if (!fromPath.isAbsolute ()) {
         fromPath = currentDirectory.resolve (fromPath);
+        }
+        if (!toPath.isAbsolute ()) {
         toPath = currentDirectory.resolve (toPath);
+        }
 
         if (fromPath.equals (toPath)) {
             throw new IllegalArgumentException ("Try to copy file [" + fromPath + "] to itself: don't do it");
         }
 
-        if (Files.exists (fromPath) && Files.exists (toPath)) {
+        if (Files.exists (fromPath)) {
             try {
                 Path destination = Files.isDirectory (toPath) ? toPath.resolve (fromPath.getFileName ()) : toPath;
                 Files.walkFileTree (fromPath, EnumSet.of (FileVisitOption.FOLLOW_LINKS),
@@ -103,7 +107,7 @@ public class FileManager {
                 throw new IllegalArgumentException ("Fail to copy [" + fromPath + "] to [" + toPath + "] " + io);
             }
         } else {
-            throw new IllegalArgumentException ("Fail to copy [" + fromPath + "] to [" + toPath + "] one of files doesn't exist");
+            throw new IllegalArgumentException ("Fail to copy [" + fromPath + "] to [" + toPath + "] file doesn't exist");
         }
     }
 
@@ -172,7 +176,9 @@ public class FileManager {
     }
 
     void deleteFile (Path file) throws RuntimeException {
+        if (!file.isAbsolute ()) {
         file = currentDirectory.resolve (file);
+        }
         if (Files.notExists (file)) {
             throw new RuntimeException ("Try to delete file [" + file + "] which doesn't exist");
         } else {
@@ -222,8 +228,12 @@ public class FileManager {
     }
 
     public void moveFile (Path fromPath, Path toPath) throws RuntimeException {
+        if (!fromPath.isAbsolute ())  {
         fromPath = currentDirectory.resolve (fromPath);
+        }
+        if (!toPath.isAbsolute ()) {
         toPath = currentDirectory.resolve (toPath);
+        }
 
         if (Files.notExists (fromPath) || (Files.isDirectory (toPath) && Files.notExists (toPath))) {
             throw new RuntimeException ("Fail to move [" + fromPath + "] to [" + toPath + "] one of files doesn't exist");

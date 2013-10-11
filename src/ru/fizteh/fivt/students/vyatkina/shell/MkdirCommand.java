@@ -6,7 +6,7 @@ import java.nio.file.Paths;
 
 public class MkdirCommand implements Command {
 
-    FileManager fileManager;
+    private final FileManager fileManager;
 
     MkdirCommand (FileManager fileManager) {
         this.fileManager = fileManager;

@@ -4,7 +4,8 @@ package ru.fizteh.fivt.students.vyatkina.shell;
 import java.io.PrintStream;
 
 public class PwdCommand implements Command {
-    FileManager fileManager;
+
+    private final FileManager fileManager;
 
     PwdCommand (FileManager fileManager) {
        this.fileManager = fileManager;

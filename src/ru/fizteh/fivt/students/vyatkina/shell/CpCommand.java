@@ -5,7 +5,8 @@ import java.nio.file.Paths;
 
 
 public class CpCommand implements Command {
-    FileManager fileManager;
+
+    private final FileManager fileManager;
 
     CpCommand (FileManager fileManager) {
         this.fileManager = fileManager;

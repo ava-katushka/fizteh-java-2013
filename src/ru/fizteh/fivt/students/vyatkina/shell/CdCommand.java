@@ -12,7 +12,7 @@ import java.nio.file.Paths;
  */
 public class CdCommand implements Command {
 
-    FileManager fileManager;
+    private final FileManager fileManager;
 
     CdCommand (FileManager fileManager) {
         this.fileManager = fileManager;

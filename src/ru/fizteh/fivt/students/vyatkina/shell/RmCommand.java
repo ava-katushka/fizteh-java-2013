@@ -4,7 +4,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class RmCommand implements Command {
-    FileManager fileManager;
+
+    private final FileManager fileManager;
 
     RmCommand (FileManager fileManager) {
       this.fileManager = fileManager;

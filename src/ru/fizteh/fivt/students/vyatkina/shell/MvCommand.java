@@ -4,7 +4,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 public class MvCommand implements Command {
-    FileManager fileManager;
+
+    private final FileManager fileManager;
 
     MvCommand (FileManager fileManager) {
         this.fileManager = fileManager;

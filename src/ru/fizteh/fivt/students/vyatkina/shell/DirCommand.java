@@ -6,7 +6,7 @@ import java.util.Comparator;
 
 public class DirCommand implements Command {
 
-    FileManager fileManager;
+    private final FileManager fileManager;
 
     DirCommand (FileManager fileManager) {
         this.fileManager = fileManager;
